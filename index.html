@@ -12,22 +12,70 @@
       }
       #map {
         height: 100%;
+        postion: relative;
+        z-index: 1;
+
       }
+      #buttons {
+      	height: 100%;
+      	position: absolute;
+      	left: 50%;
+      	top: 90%;
+      	width: 100%;
+      	background-color: transparent;
+      	z-index: 2;
+
+      }
+      #b {}
+
     </style>
+
+
   </head>
   <body>
-    <div id="map"></div>
+
+    <div id="map"> 
+    </div>
+    <div id="buttons">
+		<button id= "b" onclick="plusZoom()" type = "button"> +</button>
+		<button onclick="minusZoom()" type = "button"> - </button>
+		<button id= "panning"type = "button"> panning </button>
+
+    </div>
+
     <script>
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
+          center: {lat: 59.346944, lng: 18.071944}, // kth koordinater
+          // center: {lat: 59.3308, lng: 18.0631}, // city koordinater
+          zoom: 18, tilt: 45,
+          disableDefaultUI: true,
+
         });
       }
-    </script>
+
+      function plusZoom() {
+      	var zoom = map.getZoom()
+      	zoom +=1 
+      	map.setZoom(zoom)
+      }
+ 
+      function minusZoom() {
+      	var zoom = map.getZoom()
+      	zoom -=1
+      	map.setZoom(zoom) 
+      }
+
+
+	</script>
+
+
+
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7Z2r8SM1mMa-tO4_6jdqu7o5LaJ0E0kA&callback=initMap"
     async defer></script>
+	
   </body>
 </html>
 
