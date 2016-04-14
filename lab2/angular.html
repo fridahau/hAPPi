@@ -7,33 +7,48 @@
 <script src="angular-youtube-embed.js"></script>
 
 <body ng-app="myApp" ng-controller="karateCtrl">
-<h1>It's so fluffy I'm gonna die!!</h1>
-<h2>My karate List</h2>
-<form ng-submit="karateAdd()">
-    <input type="text" ng-model="karateInput" size="50" placeholder="Add New video">
+<h1>hAPPi</h1>
+<h2>Here you will learn a lot about minion!!!!</h2>
+<form ng-submit="addToList()">
+    <input type="text" ng-model="URLInput" size="30" placeholder="Add video URL">
+    <input type="text" ng-model="titleInput" size="30" placeholder="Name your video">
+    <input type="text" ng-model="imageInput" size="30" placeholder="Add image">
+    <input type="text" ng-model="categoryInput" size="30" placeholder="Add category">
     <input type="submit" value="Add New">
 </form>
 </br>
-<div ng-repeat="x in karateList">
+<!-- <div ng-repeat="x in karateList">
     <input type="checkbox" ng-model="x.done" /> <span ng-bind="x.karateText"></span>
-</div>
-
-<p><button ng-click="remove()">Remove marked video</button></p>
+</div> -->
 
 <!-- You can use 'youtube-video' as an element or attribute. -->
 <youtube-video video-id="theBestVideo"></youtube-video>
+
+
+<p><button ng-click="remove()">Remove marked video</button></p>
+
+
 
 
 <script>
 var app = angular.module('myApp', ['youtube-embed']); 
 app.controller('karateCtrl', function($scope) 
     {
-    $scope.karateList = [{karateText:'Rika Usama', done:false}, {karateText:'Jesse Enkamp', done:false}];
-    $scope.karateAdd = function() 
+    // $scope.karateList = [{karateText:'Rika Usama', done:false}, {karateText:'Jesse Enkamp', done:false}];
+    // $scope.videoList = [{URL:URLInput, title: titleInput, image:imageInput, category: categoryInput, done:false }];
+    $scope.videoList = [];
+    $scope.addToList = function() 
         {
-        $scope.karateList.push({karateText:$scope.karateInput, done:false});
-        $scope.karateInput = "";
+        //$scope.karateList.push({karateText:$scope.karateInput, done:false});
+        $scope.videoList.push({URL:$scope.URLInput, title: $scope.titleInput, image:$scope.imageInput, category: $scope.categoryInput, done:false });
+        $scope.URLInput = "";
+        $scope.titleInput = "";
+        $scope.imageInput = "";
+        $scope.categoryInput = "";
+        console.log($scope.videoList)
+        $scope.theBestVideo = {{app.getIdFromURL($scope.URLInput)}};
         };
+
 
     $scope.remove = function() 
         {
@@ -45,7 +60,10 @@ app.controller('karateCtrl', function($scope)
             });
         };
  
- $scope.theBestVideo = 'TyX2nGbAWgs';
+ // $scope.theBestVideo = 'TyX2nGbAWgs';
+
+// vi skapar en funktion som gör youtube videon (på rad 25 ovan) med input objekten i videList. 
+
 
 });
 </script>
