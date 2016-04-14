@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+// added two library files to do youtube embeds
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="angular-youtube-embed.js"></script>
+
+<body ng-app="myApp" ng-controller="karateCtrl">
+<h1>It's so fluffy I'm gonna die!!</h1>
+<h2>My karate List</h2>
+<form ng-submit="karateAdd()">
+    <input type="text" ng-model="karateInput" size="50" placeholder="Add New video">
+    <input type="submit" value="Add New">
+</form>
+</br>
+<div ng-repeat="x in karateList">
+    <input type="checkbox" ng-model="x.done" /> <span ng-bind="x.karateText"></span>
+</div>
+
+<p><button ng-click="remove()">Remove marked video</button></p>
+
+<!-- You can use 'youtube-video' as an element or attribute. -->
+<youtube-video video-id="theBestVideo"></youtube-video>
+
+
+<script>
+var app = angular.module('myApp', ['youtube-embed']); 
+app.controller('karateCtrl', function($scope) 
+    {
+    $scope.karateList = [{karateText:'Rika Usama', done:false}, {karateText:'Jesse Enkamp', done:false}];
+    $scope.karateAdd = function() 
+        {
+        $scope.karateList.push({karateText:$scope.karateInput, done:false});
+        $scope.karateInput = "";
+        };
+
+    $scope.remove = function() 
+        {
+        var oldList = $scope.karateList;
+        $scope.karateList = [];
+        angular.forEach(oldList, function(x) 
+            {
+            if (!x.done) $scope.karateList.push(x);
+            });
+        };
+ 
+ $scope.theBestVideo = 'TyX2nGbAWgs';
+
+});
+</script>
+</body>
+</html>
