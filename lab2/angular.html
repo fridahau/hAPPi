@@ -6,11 +6,53 @@
 <script src="https://www.youtube.com/iframe_api"></script>
 <script src="angular-youtube-embed.js"></script>
 
+<script src="angular-cookies.min.js"></script>
+<script src="angularLocalStorage.js"></script>
+<script src="script.js"></script>
+
 <style type="text/css">
     body { 
         background: url(http://i.stack.imgur.com/8sNfT.jpg) no-repeat center center fixed;
         background-size: cover;
     }
+    .starRating:not(old){
+		display        : inline-block;
+		width          : 7.5em;
+		height         : 1.5em;
+		overflow       : hidden;
+		vertical-align : bottom;
+	}
+	/* hides the buttons */
+	.starRating:not(old) > input{
+		margin-right : -100%;
+		opacity      : 0;
+	}
+	/*this shows the off state stars*/
+	.starRating:not(old) > label{
+		display         : block;
+		float           : right;
+		position        : relative;
+		background      : url('star-off.svg');
+		background-size : contain;
+	}
+	/**/
+	.starRating:not(old) > label:before{
+	content         : '';
+	display         : block;
+	width           : 1.5em;
+	height          : 1.5em;
+	background      : url('star-on.svg');
+	background-size : contain;
+	opacity         : 0;
+	transition      : opacity 0.2s linear;
+	}
+	/*on state*/
+	.starRating:not(old) > label:hover:before,
+	.starRating:not(old) > label:hover ~ label:before,
+	.starRating:not(:hover) > :checked ~ label:before{
+  	opacity : 1;
+	}
+
 </style>
 
     <body ng-app="myApp" ng-controller="karateCtrl">
@@ -20,14 +62,14 @@
 
         <form ng-submit="addToList()">
         <!--     <input type="text" ng-model="idInput" size="30" placeholder="Add id"> -->
-            <input type="text" ng-model="URLInput" size="30" placeholder="Add video URL">
-            <input type="text" ng-model="titleInput" size="30" placeholder="Name your video">
-            <input type="text" ng-model="imageInput" size="30" placeholder="Add image">
+            <input type="text" ng-model="URLInput" size="100%" style="font-size: 40px;" placeholder="Add video URL">
+            <input type="text" ng-model="titleInput" size="100%" style="font-size: 40px;" placeholder="Name your video">
+            <input type="text" ng-model="imageInput" size="100%" style="font-size: 40px;" placeholder="Add image">
             <!-- <input type="text" ng-model="categoryInput" size="30" placeholder="Add category"> -->
-            <select ng-model="categoryInput">
-                <option value="learn">learn</option>
-                <option value="entertainment">entertainment</option>
-                <option value="fluffy">fluffy</option>
+            <select required="required" ng-model="categoryInput">
+                <option style="font-size: 40px;" value="learn">learn</option>
+                <option style="font-size: 40px;" value="entertainment">entertainment</option>
+                <option style="font-size: 40px;" value="fluffy">fluffy</option>
             </select>
             <input type="submit" value="Add New">
         </form>
@@ -48,47 +90,82 @@
             <h4>{{x.category}} </h4>
             <p><button ng-click="remove(x.id)">Remove video</button></p>
 
-            <form ng-submit="comment(commentInput)">
-                <input id="commentfield" type="text" ng-model="commentInput" placeholder="Add comment">
+            <form ng-submit="comment(commentInput,x.id)">
+                <input id="commentField" type="text" ng-model="commentInput" placeholder="Add comment">
                 <input type="submit" value="Comment">
             </form>
-            <div ng-repeat="comment in commentList track by $index">
+            <div ng-repeat="comment in x.comments track by $index">
                 <p>{{comment}}</p>
             </div>
 
+			<span class="starRating">
+				<input id="rating5" type="radio" name="rating" value="5">
+				<label for="rating5">5</label>
+				<input id="rating4" type="radio" name="rating" value="4">
+				<label for="rating4">4</label>
+				<input id="rating3" type="radio" name="rating" value="3">
+				<label for="rating3">3</label>
+				<input id="rating2" type="radio" name="rating" value="2">
+				<label for="rating2">2</label>
+				<input id="rating1" type="radio" name="rating" value="1">
+				<label for="rating1">1</label>
+			</span>
         </div> 
 
 
+
         <script>
+        
+        //Gör så att man inte kan lägga in 2 videor med samma ID
+        //Gör så att kommentarsfältet töms i den andra videon
+
             var app = angular.module('myApp', ['youtube-embed']); 
             app.controller('karateCtrl', function($scope, youtubeEmbedUtils) {
                 
-                $scope.videoList = new Array();
-                $scope.commentList = new Array();
-
-
-//!!!Gör en ny del i videoList som är commentList där vi pushar in varje ny kommentar. På så sätt får vi en kommentarsfältet ihop med varje video för sig. 
+                $scope.videoList = []; 
 
                 $scope.addToList = function() {
-                        //Gör en ny del i videoList som är commentList där vi pushar in varje ny kommentar. På så sätt får vi en kommentarsfältet ihop med varje video för sig. 
-                    $scope.videoList.push({id: youtubeEmbedUtils.getIdFromURL($scope.URLInput), title: $scope.titleInput, image:$scope.imageInput, category: "Category: " + $scope.categoryInput, done:false });
+
+					$scope.videoID = youtubeEmbedUtils.getIdFromURL($scope.URLInput)
+                   
+                    // if ($scope.videoList.length == 0){
+                        $scope.videoList.push({id: $scope.videoID, title: $scope.titleInput, image:$scope.imageInput, category: "Category: " + $scope.categoryInput, comments: [], done:false });
+     //                }
+     //                else {
+     //                	for (var i=0; i<$scope.videoList.length; i++){
+	    //                 	if ($scope.videoList[i].id == $scope.videoID){
+	    //                 		//alert("This video already exist, please add another video with another URL.");
+
+	    //                 	}
+	    //                 	else {
+		                    	
+					// 			$scope.videoList.push({id: $scope.videoID, title: $scope.titleInput, image:$scope.imageInput, category: "Category: " + $scope.categoryInput, comments: [], done:false });
+					// 		}
+     //          			}
+					// }
+	                        
+	                        $scope.URLInput = "";
+	                        $scope.titleInput = "";
+	                        $scope.imageInput = "";
+	                        $scope.categoryInput = "";
+	                        $scope.idInput = "";
+	                        $scope.videoID="";
+
                     
-                    $scope.URLInput = "";
-                    $scope.titleInput = "";
-                    $scope.imageInput = "";
-                    $scope.categoryInput = "";
-                    $scope.idInput = "";
+                        
+                    
                 };
                 
-                $scope.comment = function(input) {
-                    console.log(input);
+                $scope.comment = function(input,id) {
                     //console.log($scope.commentInput) <-- funkar ej för att scope pekar på den första scope och då finns inte commentInput i den scope vi skrivit.
-                    $scope.commentList.push(input);
-                    input = "";
-                    document.getElementById("commentfield").value = ""
+                    for (var i=0; i<$scope.videoList.length; i++){
+                        if (id == $scope.videoList[i].id){
+                            $scope.videoList[i].comments.push(input)
+                            input = "";
+                            document.getElementById("commentField").value = ""
+                        };    
+                    }
                 };
-
-//!!!Gör en ny del i videoList som är commentList där vi pushar in varje ny kommentar. På så sätt får vi en kommentarsfältet ihop med varje video för sig. 
 
                 $scope.remove = function(input)  {
                     for (var i =0; i < $scope.videoList.length; i++)
