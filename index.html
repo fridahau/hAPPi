@@ -1,67 +1,90 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>hAPPi</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <!-- allow wep app to run in full screen -->
+    <meta name= "apple-mobile-web-app-capable" content = "yes">
+    <link rel="apple-touch-icon" href="https://cdn2.iconfinder.com/data/icons/despicable-me-2-minions/128/happy-agnes-icon.png"/>
+
     <style>
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
+      html, body  {
+        height:   100%;
+        margin:   0;
+        padding:  0;
       }
       #map {
-        height: 100%;
-        postion: relative;
-        z-index: 1;
+        height:   100%;
+        position: relative;
+        z-index:  1;
       }
       #buttons {
-      	height: 100%;
-        width: 100%;
-        z-index: 2;
-      	position: absolute;
-      	left: 50%;
-      	top: 90%;
-      	background-color: transparent;    	
+      	height:    100%;
+        width:     100%;
+        z-index:   2;
+      	position:  fixed;
+      	left:      25%;
+      	top:       75%;
+      	background-color: transparent;   
+
+
       }
       #plus{
-        position: fixed;
-        margin-left: 10px;    
+        position:  fixed;  
+        font-size: 15px;
       }
         #minus{
-        margin-left: 10px;
-        position: fixed;
-        margin-top: 20px;
-      }
-      #panning {
-        width: 100%;
-        height: 100%;
-        z-index:2;
-        position: absolute;
-        left: 55%;
-        top: 90%;
+        
+        position:  fixed;
+        margin-top:40px;
+        font-size: 15px;
 
-        background-color: transparent;
       }
+
       #up{
-        position: fixed;
-        margin-left: 25px;
+        position:     fixed;
+        margin-left:  100px;
+        font-size:    15px;
       }
       #down{
-        position: fixed;
-        margin-top: 30px;
-        
-        margin-left: 25px;
+        position:     fixed;
+        margin-top:   45px;
+        margin-left:  100px;
+        font-size:    15px;
       }
       #left{
-        position: fixed;
-        margin-top:15px;  
+        position:   fixed;
+        margin-top: 25px;
+        margin-left:60px; 
+        font-size:  15px;
       }
-      #right{
-        position: fixed;
-        margin-left:45px;
-        margin-top:15px;    
+      #right{ 
+        position:   fixed;
+        margin-left:140px;
+        margin-top: 25px;  
+        font-size:  15px;  
       }
+/*      #currentLoc{
+        position: fixed;
+        margin-top: 15px;
+        margin-left: 10%;
+
+      }*/
+
+
+      #places {
+        height:    50%;
+        width:     100%;
+        z-index:   2;
+        position:  fixed;
+        left:      10%;
+        top:       1%;
+        background-color: transparent;   
+
+
+      }
+
 
     </style>
 
@@ -72,18 +95,22 @@
     <div id="map"> 
     </div>
     <div id="buttons">
-		<button id="plus" onclick="plusZoom()" type = "button"> &#43;</button>
-		<button id="minus" onclick="minusZoom()" type = "button"> &#8722; </button>
+		  <button id="plus"  onclick="plusZoom()"  type = "button" > &#43;   </button>
+		  <button id="minus" onclick="minusZoom()" type = "button" > &#8722; </button>
+
+      <button id= "left"  onclick="panLeft()" type = "button" > &#8592; </button>
+      <button id= "up"    onclick="panUp()"   type = "button" > &#8593; </button>
+      <button id= "right" onclick="panRight()"type = "button" > &#8594; </button>
+      <button id= "down"  onclick="panDown()" type = "button" > &#8595; </button>
+
+
     </div>
 
-    <div id="panning">
-    <button id= "left" onclick="panLeft(this)"class= "vertical"type = "button" title="Reset rotation" class= "ol-compass" style= "transform rotate(0deg);"> &#8592; </button>
-    <button id= "up" onclick="panUp(this)"class= "vertical"type = "button" title="Up" class= "ol-compass" style= "transform rotate(0deg);"> &#8593; </button>
-    <button id= "right" onclick="panRight(this)"class= "vertical"type = "button" title="Reset rotation" class= "ol-compass" style= "transform rotate(0deg);"> &#8594; </button>
-    <button id= "down" onclick="panDown(this)"class= "vertical"type = "button" title="Reset rotation" class= "ol-compass" style= "transform rotate(0deg);"> &#8595; </button>
+    <div id = "places">
+      <span title = "text" > <button id= "favPlace1"  onclick="favPlace(1)"  type = "button" > Sandra's Favorite Place </button> </span>
+      <button id= "favPlace2"  onclick="favPlace(2)"  type = "button" > Frida's Favorite Place  </button>
+      <button id= "currentLoc" onclick="currentLoc()" type = "button" > Current Location        </button>
     </div>
-
-
 
 
 
@@ -92,12 +119,40 @@
       var view;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
+          
           center: {lat: 59.346944, lng: 18.071944}, // kth koordinater
           // center: {lat: 59.3308, lng: 18.0631}, // city koordinater
           zoom: 18, tilt: 45,
           disableDefaultUI: true,
 
+
         });
+        marker= new google.maps.Marker({
+          map:map,
+          draggable: true, // om vi sätter draggable till false så kan man inte flytta markören.
+          animation: google.maps.Animation.DROP, //om man sätter .BOUNCE så hoppar markören hela tiden.
+          position: {lat: 59.346944, lng: 18.071944} //kth location för marker
+          // position: {lat: 58.659975, lng: 17.154980}
+
+        });
+
+        marker= new google.maps.Marker({
+          map:map,
+          draggable: true, // om vi sätter draggable till false så kan man inte flytta markören.
+          animation: google.maps.Animation.DROP, //om man sätter .BOUNCE så hoppar markören hela tiden.
+          position: {lat: 59.325695, lng: 18.071869}
+          // position: {lat: 58.659975, lng: 17.154980}
+
+        });
+
+        marker= new google.maps.Marker({
+          map:map,
+          draggable: true, // om vi sätter draggable till false så kan man inte flytta markören.
+          animation: google.maps.Animation.DROP, //om man sätter .BOUNCE så hoppar markören hela tiden.
+          position: {lat: 58.659975, lng: 17.154980}
+
+        });
+
       }
 
       function plusZoom() {
@@ -112,22 +167,45 @@
       	map.setZoom(zoom) 
       }
 
-      function panUp(value){
+      function panUp(){
         map.panBy(0,-30);
       }
 
-      function panDown(value){
+      function panDown(){
         map.panBy(0,30)
       }
 
-      function panLeft(value){
+      function panLeft(){
         map.panBy(-30,0)
       }
 
-      function panRight(value){
+      function panRight(){
         map.panBy(30,0)
       }
-      
+
+      function currentLoc(){
+        
+        navigator.geolocation.getCurrentPosition(function(location){
+          var lati=location.coords.latitude
+          var longi= location.coords.longitude
+          map.setCenter({lat: lati, lng: longi })
+
+        });
+
+      }
+
+      function favPlace(place){
+        if (place==1){
+          var lati= 59.325695
+          var longi = 18.071869
+          map.setCenter({lat:lati, lng: longi})
+        } else if (place==2){
+          var lati= 58.659975
+          var longi = 17.154980
+          map.setCenter({lat:lati, lng: longi})
+        }
+
+      };
 
 
 	</script>

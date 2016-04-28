@@ -12,7 +12,7 @@
 
 <style type="text/css">
     body { 
-        background: url(http://i.stack.imgur.com/8sNfT.jpg) no-repeat center center fixed;
+        background: url(http://www.hdiphone6wallpaper.com/wp-content/uploads/Nature/FTP2/Spot%20blue%20background%20iPhone%206%20Wallpaper.jpg) no-repeat center center fixed;
         background-size: cover;
     }
 
@@ -21,21 +21,29 @@
 
     <body ng-app="myApp" ng-controller="karateCtrl">
 
-        <h1>hAPPi</h1>
-        <h2>Here you will learn a lot about minion!!!!</h2>
+        
+    <div style = "background: black;" >
+        <h1 style= "color: white; font-size: 50px; text-align: center;"> hAPPi</h1>
+        <h2 style= "color: white; font-size: 40px;text-align: center;"> Here you will learn a lot about minion!!!!</h2>
 
-        <form ng-submit="addToList()">
+    </div>
+
+        <form ng-submit="addToList()" style= "text-align: center;">
         <!--     <input type="text" ng-model="idInput" size="30" placeholder="Add id"> -->
-            <input type="text" ng-model="URLInput" size="100%" style="font-size: 40px;" placeholder="Add video URL">
-            <input type="text" ng-model="titleInput" size="100%" style="font-size: 40px;" placeholder="Name your video">
-            <input type="text" ng-model="imageInput" size="100%" style="font-size: 40px;" placeholder="Add image">
+            <input type="text" ng-model="URLInput" width="50%" style="font-size: 40px;" placeholder="Add video URL" required>
+            </br><input type="text" ng-model="titleInput" width="50%" style="font-size: 40px;" placeholder="Name your video" required>
+            </br><input type="text" ng-model="imageInput" width="50%" style="font-size: 40px;" placeholder="Add thumbnail">
+            </br><input type="text" ng-model="categoryInput" width="50%" style="font-size: 40px;" placeholder="Add category" required>
+
             <!-- <input type="text" ng-model="categoryInput" size="30" placeholder="Add category"> -->
-            <select required="required" ng-model="categoryInput">
-                <option style="font-size: 40px;" value="learn">learn</option>
-                <option style="font-size: 40px;" value="entertainment">entertainment</option>
-                <option style="font-size: 40px;" value="fluffy">fluffy</option>
-            </select>
-            <input type="submit" value="Add New">
+<!--             <select style= "width: 50%;"required ng-model="categoryInput">
+                <option value="Learn">Learn</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Fluffy">Fluffy</option>
+            </select> -->
+            </br>
+            </br>
+            <button style="font-size: 40px;" type="submit"> Add New</button>
         </form>
         </br>
     <!-- <div ng-repeat="x in karateList">
@@ -46,35 +54,39 @@
 
         <div ng-repeat="x in videoList" >
                 
-            <youtube-video video-id="x.id"></youtube-video>
-            <h1> {{x.title}} </h1>
-            </br>        
-            <img src="video1.jpg" style="width:100px;">
+            <youtube-video video-id="x.id" style = "width: 100%"></youtube-video>
+            <h1> {{x.title}} </h1>  
+            <h3>{{x.category}} </h3>  
+                
+            <img src="{{x.image}}" style="width:200px;">
 
-            <h4>{{x.category}} </h4>
+            
+            </br> 
+            <h2>Rate the video: </h2>
+            
+                <button style="font-size: 40px;" ng-click="rate('1',x.id)"> 1</button>
+                <button style="font-size: 40px;" ng-click="rate('2',x.id)"> 2</button>
+                <button style="font-size: 40px;" ng-click="rate('3',x.id)"> 3</button>
+                <button style="font-size: 40px;" ng-click="rate('4',x.id)"> 4</button>
+                <button style="font-size: 40px;" ng-click="rate('5',x.id)"> 5</button>
 
-            <form ng-submit="rate(ratingInput,x.id)">
-                <select  ng-model="ratingInput">
-                    <option style="font-size: 40px;" value="1">1</option>
-                    <option style="font-size: 40px;" value="2">2</option>
-                    <option style="font-size: 40px;" value="3">3</option>
-                </select>
-
-                <input type="submit" value="Rate">
-            </form>
-
-                <p>Your rating is: {{x.rate}}</p>
-
-
-            <p><button ng-click="remove(x.id)">Remove video</button></p>
+                <h3>Your rating is: {{x.rate}}</h3>
+                </br> 
+            <button style="font-size: 40px;" ng-click="remove(x.id)">Remove video</button>
+            </br>
+            </br>
 
             <form ng-submit="comment(commentInput,x.id)">
-                <input id="commentField" type="text" ng-model="commentInput" placeholder="Add comment">
-                <input type="submit" value="Comment">
+                <input style="font-size: 40px;" id="commentField" type="text" ng-model="commentInput" placeholder="Add comment">
+                <button style="font-size: 40px;" type="submit"> Comment</button>
+                </br>
+                </br>
             </form>
             <div ng-repeat="comment in x.comments track by $index">
                 <p>{{comment}}</p>
+
             </div>
+            </br>
 
         </div> 
 
@@ -88,7 +100,13 @@
             var app = angular.module('myApp', ['youtube-embed']); 
             app.controller('karateCtrl', function($scope, youtubeEmbedUtils) {
                 
-                $scope.videoList = []; 
+                $scope.videoList = [{id:"IGcMoM_QlDI", title: "Minions Facts", image: "video2.jpg", 
+                    category: "Category: Learn" ,comments: [], rate: "NOT RATED", done:false}, 
+
+                    {id:"5q59X1QWYFg", title: "Minion Langugage" , image: "video4.jpg", 
+                        category: "Category: Learn", comments: [],rate: "NOT RATED", done:false }, 
+                    {id:"AsgqjcXgZy0", title: "Banana song",  image: "video3.jpg", 
+                        category: "Category: Fluffy",comments: [], rate: "NOT RATED", done:false}]; 
 
                 $scope.addToList = function() {
 
@@ -116,9 +134,6 @@
 	                        $scope.categoryInput = "";
 	                        $scope.idInput = "";
 	                        $scope.videoID="";
-
-                    
-                        
                     
                 };
                 
