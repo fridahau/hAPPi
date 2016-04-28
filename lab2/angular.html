@@ -15,43 +15,7 @@
         background: url(http://i.stack.imgur.com/8sNfT.jpg) no-repeat center center fixed;
         background-size: cover;
     }
-    .starRating:not(old){
-		display        : inline-block;
-		width          : 7.5em;
-		height         : 1.5em;
-		overflow       : hidden;
-		vertical-align : bottom;
-	}
-	/* hides the buttons */
-	.starRating:not(old) > input{
-		margin-right : -100%;
-		opacity      : 0;
-	}
-	/*this shows the off state stars*/
-	.starRating:not(old) > label{
-		display         : block;
-		float           : right;
-		position        : relative;
-		background      : url('star-off.svg');
-		background-size : contain;
-	}
-	/**/
-	.starRating:not(old) > label:before{
-	content         : '';
-	display         : block;
-	width           : 1.5em;
-	height          : 1.5em;
-	background      : url('star-on.svg');
-	background-size : contain;
-	opacity         : 0;
-	transition      : opacity 0.2s linear;
-	}
-	/*on state*/
-	.starRating:not(old) > label:hover:before,
-	.starRating:not(old) > label:hover ~ label:before,
-	.starRating:not(:hover) > :checked ~ label:before{
-  	opacity : 1;
-	}
+
 
 </style>
 
@@ -88,6 +52,20 @@
             <img src="video1.jpg" style="width:100px;">
 
             <h4>{{x.category}} </h4>
+
+            <form ng-submit="rate(ratingInput,x.id)">
+                <select  ng-model="ratingInput">
+                    <option style="font-size: 40px;" value="1">1</option>
+                    <option style="font-size: 40px;" value="2">2</option>
+                    <option style="font-size: 40px;" value="3">3</option>
+                </select>
+
+                <input type="submit" value="Rate">
+            </form>
+
+                <p>Your rating is: {{x.rate}}</p>
+
+
             <p><button ng-click="remove(x.id)">Remove video</button></p>
 
             <form ng-submit="comment(commentInput,x.id)">
@@ -98,18 +76,6 @@
                 <p>{{comment}}</p>
             </div>
 
-			<span class="starRating">
-				<input id="rating5" type="radio" name="rating" value="5">
-				<label for="rating5">5</label>
-				<input id="rating4" type="radio" name="rating" value="4">
-				<label for="rating4">4</label>
-				<input id="rating3" type="radio" name="rating" value="3">
-				<label for="rating3">3</label>
-				<input id="rating2" type="radio" name="rating" value="2">
-				<label for="rating2">2</label>
-				<input id="rating1" type="radio" name="rating" value="1">
-				<label for="rating1">1</label>
-			</span>
         </div> 
 
 
@@ -129,7 +95,7 @@
 					$scope.videoID = youtubeEmbedUtils.getIdFromURL($scope.URLInput)
                    
                     // if ($scope.videoList.length == 0){
-                        $scope.videoList.push({id: $scope.videoID, title: $scope.titleInput, image:$scope.imageInput, category: "Category: " + $scope.categoryInput, comments: [], done:false });
+                        $scope.videoList.push({id: $scope.videoID, title: $scope.titleInput, image:$scope.imageInput, category: "Category: " + $scope.categoryInput, comments: [], rate: "NOT RATED", done:false });
      //                }
      //                else {
      //                	for (var i=0; i<$scope.videoList.length; i++){
@@ -166,6 +132,15 @@
                         };    
                     }
                 };
+
+                $scope.rate = function(input,id) {
+                    console.log(input)
+                    for (var i=0; i<$scope.videoList.length; i++){
+                        if (id == $scope.videoList[i].id){
+                            $scope.videoList[i].rate = input
+                        }
+                    }
+                };   
 
                 $scope.remove = function(input)  {
                     for (var i =0; i < $scope.videoList.length; i++)
