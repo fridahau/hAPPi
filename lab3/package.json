@@ -1,0 +1,16 @@
+{
+  "name": "lab3",
+  "version": "1.0.0",
+  "description": "chat",
+  "main": "chat.js",
+  "dependencies": {
+    "pubnub": "^3.14.5",
+    "pubnub-angular": "^3.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

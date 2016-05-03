@@ -1,10 +1,11 @@
 (function() {
 
-  var output = document.querySelector('#output'),
-    input = document.querySelector('#input'),
-    button = document.querySelector('#button'),
-    avatar = document.querySelector('#avatar'),
-    presence = document.querySelector('#presence');
+  var output = document.querySelector('#output');
+  var input = document.querySelector('#input');
+  var button = document.querySelector('#button');
+  var avatar = document.querySelector('#avatar');
+  var presence = document.querySelector('#presence');
+  var geolocation = document.querySelector('#geolocation');
   var channel = 'mchat';
 
   // Assign a random avatar in random color
@@ -20,6 +21,7 @@
 // pub-c-ce04f67b-0f26-43ce-8be2-192e9821d1a3
 // sub-c-182105ac-0001-11e5-8fd4-0619f8945a4f
   
+  console.log(p);
 
   p.subscribe({
     channel: channel,
@@ -44,12 +46,24 @@
   function publish() {
     p.publish({
       channel: channel,
-      message: {
+      message: {  
         avatar: avatar.className,
         text: input.value
       },
       x: (input.value = '')
     });
   }
+
+  //function geolocation () {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        lat = position.coords.latitude;
+        lon = position.coords.longitude;
+        console.log('My position is' + lat + ' and ' + lon)
+
+      });
+
+    }
+  //}
 
 })();
