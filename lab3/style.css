@@ -14,6 +14,9 @@ body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Roboto Light", "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", Helvetica, Arial, sans-serif;
   background: #f9f9f9;
   color: #333;
+  background: url(http://www.cad.polito.it/~ets08/rosa_dei_venti.gif) no-repeat center center fixed;
+  background-size: center;
+
 }
 
 header {
@@ -27,6 +30,7 @@ h2,
 h3 {
   margin: 0;
   text-rendering: optimizeLegibility;
+  color: #FF69B4;
 }
 
 h1 {
@@ -49,12 +53,13 @@ button {
   -webkit-appearance: none;
   -moz-appearance: none;
   border: 1px solid #ddd;
-  color: #333;
+  color: #778899;
   font-size: 1em;
   padding: .7em 1em;
   margin-bottom: 1em;
   position: relative;
   top: 15px;
+  background-color: #FFB6C1;
 }
 
 input[type=text] {
@@ -66,7 +71,7 @@ button {
   background: #e6e6e6;
   text-shadow: 0 1px 0 #f3f3f3;
   margin: .5em 0 2em 0;
-  width: 120px;
+  width: 90px;
 }
 
 #chat {

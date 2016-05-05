@@ -1,27 +1,40 @@
 <html>
+    
     <body>
         
         <!--<script src="https://cdn.pubnub.com/sdk/pubnub-angular/pubnub-angular-3.1.1.js"></script> -->
         <!--<script type="text/javascript" src="https://cdn.pubnub.com/pubnub-dev.js"></script> -->
+
    	<link rel="stylesheet" href="style.css"> 
+   	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
 
 	<header>
-	  <h1>Super Duper Simple Chat</h1>
-	  <h2>Powered by PubNub</h2>
-	</header>
+	  <h1>You are in chat Room: </h1>
+	  <h2>
+	  	<div id= "activeChat" class= "well container-fluid" style="background-color: #D3D3D3;">
+		</div>
+		</h2>
 
+	</header>
+<!-- <button id="masterButton">Master</button> -->
 	<section id="main" role="main">
 	  <div id="chat">
 	    <i id="avatar" class="face12"></i>
 	    <input type="text" id="input" placeholder="Type your message..."> 
 	    <button id="button">Send</button>
+	    
 	  </div>
 	  
 
 	  <p id="presence"></p>
-	  <span id="geolocation"></span>
 	  <div id="output"></div>
+<!-- 	  <div id="outputSouth"></div>
+	  <div id="outputEast"></div>
+	  <div id="outputWest"></div>
+	  <div id="outputMaster"></div> -->
+
 	</section>
 	<script src="http://cdn.pubnub.com/pubnub-3.14.5.min.js"></script>
    	<script type="text/javascript" src= "chat.js"></script>
