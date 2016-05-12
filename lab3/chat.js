@@ -2,7 +2,7 @@
   
   var output = document.querySelector('#output');
 
-  
+  //var input = document.querySelector('#master');
 
   var input = document.querySelector('#input');
   var button = document.querySelector('#button');
@@ -10,6 +10,7 @@
   var presence = document.querySelector('#presence');
   var channel = 'north';
   var activeChat='north';
+  var orientation = "true";
   document.querySelector('#activeChat').innerHTML= activeChat;
   
 
@@ -21,13 +22,10 @@
   }
   
   var p = PUBNUB.init({
-    subscribe_key: 'sub-c-9f3447de-105e-11e6-bb6c-02ee2ddab7fe',
-    publish_key: 'pub-c-5d54bf3a-2c7f-4505-9007-e6b0f27c9790'
+    subscribe_key: 'sub-c-df282052-110a-11e6-a9bb-02ee2ddab7fe',
+    publish_key: 'pub-c-4b0a6fc4-cc59-4b22-9e59-bc0a0f595a00'
   });
-// pub-c-ce04f67b-0f26-43ce-8be2-192e9821d1a3
-// sub-c-182105ac-0001-11e5-8fd4-0619f8945a4f
   
-  console.log(p);
 function subscribe(){
 
     p.subscribe({
@@ -35,32 +33,20 @@ function subscribe(){
       channel: channel,
       callback: function(m) {
 
-        var content= '<p><i class="' + m.avatar + '"></i><span>' + m.text.replace(/[<>]/ig, '') + '</span></p>';
+        var content= '<p> <i class="' + m.avatar + '"></i><span>' + m.text.replace(/[<>]/ig, '') + '</span></p>';
 
         output.innerHTML=content + output.innerHTML
         
       },
-      presence: function(m) {
-        if (m.occupancy > 1) {
-          presence.textContent = m.occupancy + ' people online';
-        } else {
-          presence.textContent = 'Nobody else is online';
-        }
-      }
     });
+  }
 
     p.bind('keyup', input, function(e) {
       (e.keyCode || e.charCode) === 13 && publish()
     });
 
-  //   p.bind('keyup', input, function(e) {
-  //   if ((e.keyCode || e.charCode) === 13) {
-  //     publish();
-  //   }
-  // });
-
     p.bind('click', button, publish);
-}
+
 
 function unsubscribe(){
   
@@ -81,7 +67,6 @@ function unsubscribe(){
     });
   }
 
-
 function changeChannel (currentChannel){
   if (currentChannel!=channel){
     unsubscribe()
@@ -97,49 +82,34 @@ function changeChannel (currentChannel){
 
 
   function OrientationListener(data){
-
-    // var i=0
-    // if(i==0){
-    //   console.log(data)
-    //   alert(data.alpha)
-    //   i+=1
-    // };
-    
-
-
-    if (data.alpha > 0 && data.alpha < 90 ){
-
-      currentChannel= "west"
-      
-      
-
-    } if(data.alpha >=90 && data.alpha < 180){
-
-      currentChannel= "east"
-      
-      
-    };
-    if(data.alpha >= 180 && data.alpha < 270){
-
-      currentChannel= "south"
-      
-      
-    };
-    if (data.alpha >= 270 && data.alpha <= 360){
-
-      currentChannel= "north"
-      
-
-    };
-    changeChannel(currentChannel)
+    if (orientation == "true"){
+      if (data.alpha > 0 && data.alpha < 90 ){
+        currentChannel= "west"
+        
+      };
+      if(data.alpha >=90 && data.alpha < 180){
+        currentChannel= "east"
+      };
+      if(data.alpha >= 180 && data.alpha < 270){
+        currentChannel= "south"  
+      };
+      if (data.alpha >= 270 && data.alpha <= 360){
+        currentChannel= "north"
+      };
+      changeChannel(currentChannel)
+    }
   }
 
-// function master(){
-//   currentChannel=["west", "east", "north", "south"]
-
-//   alert(currentChannel)
-//   changeChannel(currentChannel)
+function master(){
+  orientation="false"
+  currentChannel=["west", "east", "north", "south"]
+  changeChannel(currentChannel)
   
-// };
-// document.getElementById("masterButton").onClick=master;
+};
+
+function orient(){
+  orientation="true"
+};
+document.getElementById("masterButton").addEventListener("click",master);
+document.getElementById("orientationButton").addEventListener("click",orient);
 })();

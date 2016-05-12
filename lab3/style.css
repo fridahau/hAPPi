@@ -14,23 +14,58 @@ body {
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Roboto Light", "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", Helvetica, Arial, sans-serif;
   background: #f9f9f9;
   color: #333;
-  background: url(http://www.cad.polito.it/~ets08/rosa_dei_venti.gif) no-repeat center center fixed;
+  background: url(http://icons.iconarchive.com/icons/designbolts/despicable-me-2/128/Agnes-Overjoyed-icon.png) no-repeat bottom left fixed;
   background-size: center;
+
 
 }
 
 header {
   background: #fff;
-  border-top: 4px solid #ce1126;
+  border-top: 4px solid;
   border-bottom-color: #eee;
 }
+
+/* CSS talk bubble */
+.talk-bubble {
+  margin: 40px;
+  display: inline-block;
+  position: relative;
+  width: 200px;
+  height: auto;
+  background-color: #e6ffcc;
+}
+.border{
+  border: 8px solid #666;
+}
+.round{
+  border-radius: 30px;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+
+}
+
+/*.tri-right.btm-left:after{
+  content: ' ';
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 0px;
+  right: auto;
+  top: auto;
+  bottom: -20px;
+  border: 22px solid;
+  border-color: transparent transparent transparent #e6ffcc;
+}*/
+
+
 
 h1,
 h2,
 h3 {
   margin: 0;
   text-rendering: optimizeLegibility;
-  color: #FF69B4;
+  color: #999999;
 }
 
 h1 {
@@ -45,7 +80,7 @@ h2 {
   line-height: 1.4em;
   text-align: center;
   font-weight: normal;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 
 input[type=text],
@@ -59,7 +94,7 @@ button {
   margin-bottom: 1em;
   position: relative;
   top: 15px;
-  background-color: #FFB6C1;
+  background-color: #ffffb3;
 }
 
 input[type=text] {
@@ -125,7 +160,7 @@ button {
   font-variant: normal;
   text-transform: none;
   line-height: 1;
-  /* Better Font Rendering =========== */
+
   
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

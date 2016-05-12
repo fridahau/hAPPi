@@ -1,5 +1,9 @@
 <html>
-    
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--<base href="http://evothings.com/demos/dome_pics/index.html">--><base href=".">
+    <meta name="viewport" content="width=device-width, user-scalable=no,
+        shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    </head>
     <body>
         
         <!--<script src="https://cdn.pubnub.com/sdk/pubnub-angular/pubnub-angular-3.1.1.js"></script> -->
@@ -11,14 +15,19 @@
 
 
 	<header>
-	  <h1>You are in chat Room: </h1>
+	<div class= "well container-fluid" style="background: #ffff66;"><h1>hAPPi Chat</h1></div>
+
+
+	 <div style="background: #ffffb3;"><h2>You are in chat Room </h2>
 	  <h2>
-	  	<div id= "activeChat" class= "well container-fluid" style="background-color: #D3D3D3;">
+	  	<div id= "activeChat" class= "well container-fluid">
 		</div>
 		</h2>
+	</div>
 
 	</header>
-<!-- <button id="masterButton">Master</button> -->
+<button id="orientationButton">Orient</button>
+<button id="masterButton">Master</button>
 	<section id="main" role="main">
 	  <div id="chat">
 	    <i id="avatar" class="face12"></i>
@@ -29,7 +38,7 @@
 	  
 
 	  <p id="presence"></p>
-	  <div id="output"></div>
+	  <h2><div id="output" class="talk-bubble round "></div></h2>
 <!-- 	  <div id="outputSouth"></div>
 	  <div id="outputEast"></div>
 	  <div id="outputWest"></div>
@@ -37,6 +46,7 @@
 
 	</section>
 	<script src="http://cdn.pubnub.com/pubnub-3.14.5.min.js"></script>
+
    	<script type="text/javascript" src= "chat.js"></script>
 	</body>
 </html>
