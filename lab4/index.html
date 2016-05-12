@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no,
+        shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title></title>
+    <script src="http://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="liquidFillGauge.js" language="JavaScript"></script>
+    <style>
+        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+    </style>
+    <script src="./simple_files/jquery-2.1.1.min.js"></script>
+    <script src="./simple_files/jquery.mobile-1.4.5.js"></script>
+    <link rel="stylesheet" href="./simple_files/jquery.mobile-1.4.5.css">
+
+</head>
+<body>
+
+<button id="1" onclick="roomSelect(1);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px; background-color: #F8F8F8">Room 1</button>
+<button id="2" onclick="roomSelect(2);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #E8E8E8">Room 2</button>
+<button id="3" onclick="roomSelect(3);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #D0D0D0">Room 3</button>
+
+<button id="4" onclick="roomSelect(4);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #B8B8B8">Room 4</button>
+<button id="5" onclick="roomSelect(5);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #606060">Room 5</button>
+<button id="6" onclick="roomSelect(6);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #ffffff">Room 6</button>
+</br>
+
+
+<div>
+    <svg id="fillgauge1" width="97%" height="200"></svg>
+</div>
+<!-- <div>
+    <h3>Lumination (lux)</h3>
+    <svg id="fillgauge2" width="97%" height="200"></svg>
+</div> -->
+
+<div id="printHere"><!-- <h1>Sensor Data</h1><br><div id="time">Time  2016-05-09T20:07:58.546Z</div><div id="hum">Humidity 37.9911 % (rel)</div><div id="temp">Temperature 21.5 celcius</div><img src="./simple_files/IMG_1758.JPG"> --></div>
+<script language="JavaScript">
+    //var gauge1 = loadLiquidFillGauge("fillgauge1", 0);
+    // temp
+    var config1 = liquidFillGaugeDefaultSettings();
+    config1.circleColor = "#FF7777";
+    config1.textColor = "#FF4444";
+    config1.waveTextColor = "#FFAAAA";
+    config1.waveColor = "#FFDDDD";
+    config1.circleThickness = 0.2;
+    config1.textVertPosition = 0.2;
+    config1.waveAnimateTime = 1000;
+    
+
+</script>
+
+
+<script>
+
+// Create an empty sensor object as a global 
+var sensor = {};
+
+// Where the sensor data is stored
+var mSensorDataURL = 'http://backup.evothings.com:8082/output/';
+
+function roomSelect(number){
+
+// A subscriber's key (Five other keys also availble at http://smartspaces.r1.kth.se:8082)
+    if (number == 1){
+        sensor.key = "BQa4EqqbgxfMgpBQ8XwNhvP82Dj"
+        sensor.image = "https://evothings.com/demos/dome_pics/IMG_1758.JPG"
+    }
+    if (number == 2){
+        sensor.key = "J3Wgj9qegGFX4r9KlxxGfaeMXQB",
+        sensor.image = "https://evothings.com/demos/dome_pics/IMG_1759.JPG"
+    }
+    if (number == 3){
+        sensor.key = "lB6p49pzXdFGQjpLwzzOTWj10rd",
+        sensor.image = "https://evothings.com/demos/dome_pics/IMG_1762.JPG"
+    }
+    if (number == 4){
+        sensor.key = "L4D98lO9ObtOdzx3PggKIaWmMGA",
+        sensor.image = "https://evothings.com/demos/dome_pics/IMG_1763.JPG"
+    }
+    if (number == 5){
+        sensor.key = "LAjQ9E8PBOiOdzx3PggKIaWmMGA",
+        sensor.image = "https://evothings.com/demos/dome_pics/IMG_1761.JPG"
+    }
+    if (number == 6){
+        sensor.key = "BkPNOapq2WSMgpVlNQQKFYXPBWr",
+        sensor.image = "https://evothings.com/demos/dome_pics/IMG_1760.JPG"
+    }
+    getJSON();
+        //sensor.key = "BQa4EqqbgxfMgpBQ8XwNhvP82Dj";
+    
+};
+
+// A bitmap image describing where the sensor is located
+//sensor.image = "https://evothings.com/demos/dome_pics/IMG_1758.JPG";
+
+
+// Function to retrieve data, placing it in a "response" object
+function getJSON() 
+    {
+    if (window.cordova) 
+        {
+            console.log('Using Apache Cordova HTTP GET function');
+            cordovaHTTP.get(
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day&page=1',
+                function (response) 
+                    {
+                        if (response) 
+                            {
+                                sensor.data = JSON.parse(response.data)[0];
+                                sensor.fullData = JSON.parse(response.data);
+                                printData();
+                            }
+                    },
+                function (error) 
+                    {
+                    console.log(JSON.stringify(error));
+                    });
+        }    
+    else 
+        {
+            console.log('Not using Cordova, fallback to AJAX via jquery');
+            $.ajax({
+                    url: mSensorDataURL + sensor.key + ".json?gt[timestamp]=now- 1day",
+                    jsonp: "callback",
+                    cache: true,
+                    dataType: "jsonp",
+                    data: 
+                        {
+                            page: 1
+                        },
+                    success: function(response) 
+                        {
+                            if (response && response[0]) 
+                                {
+                                    sensor.data = response[0];
+                                    sensor.fullData = response;
+                                    console.log(sensor.data);
+                                    printData();
+                                }
+                        }
+                });
+        }
+}
+
+
+function printData()    
+    {
+        var recommendation = ""
+        var color = ""
+        if (sensor && sensor.data) 
+            {
+            // Display the info.
+            if (sensor.data.t > 22 && sensor.data.t < 26 && sensor.data.l < 4){
+                var gauge1 = loadLiquidFillGauge("fillgauge1", 100) 
+                var config1 = liquidFillGaugeDefaultSettings();
+                config1.circleColor = "#009933";
+                color = "#009933";
+                recommendation = "RECOMMENDED"
+            }
+            if (sensor.data.t < 22 && sensor.data.l < 4){
+                var gauge1 = loadLiquidFillGauge("fillgauge1", 50) 
+                var config1 = liquidFillGaugeDefaultSettings();
+                config1.circleColor = "#ff9933";  
+                color = "#ff9933";  
+                recommendation = "NEUTRAL"
+            }                 
+            if (sensor.data.t > 26 && sensor.data.l > 4){
+                var gauge1 = loadLiquidFillGauge("fillgauge1", 20) 
+                var config1 = liquidFillGaugeDefaultSettings();
+                config1.circleColor = "#cc0000";
+                color = "#cc0000";
+                recommendation = "NOT RECOMMENDED"
+            }                   
+                // var gauge2= loadLiquidFillGauge("fillgauge2", sensor.data.l);
+                // var gauge3 = loadLiquidFillGauge("fillgauge3", sensor.data);
+                html =
+                '<div style="background-color: ' + color +'"><h3>' + recommendation + '</h3></div>'
+                 + '<br /><div id="time">Time  ' + sensor.data.timestamp + '</div>'
+                 + '<div id="hum">Based on temperature: ' + sensor.data.t + ' °C</div>'
+                 + '<div id="temp">Based on lumination ' + sensor.data.l + ' lux</div>'
+                 + '<img style="width: 200px;" src="' + sensor.image + '" />'
+            } 
+    else 
+            {
+                html = '<h1>Sensor Data</h1>'
+                 + '<br />Sorry, sensor data not available right now :(</br>'
+                 + '<img src="' + sensor.image + '" />'
+            }
+    document.getElementById("printHere").innerHTML= html;
+    }
+
+
+
+</script>
+
+</body>
+</html>
