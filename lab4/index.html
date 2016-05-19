@@ -21,14 +21,14 @@
 <button id="2" onclick="roomSelect(2);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #E8E8E8">Room 2</button>
 <button id="3" onclick="roomSelect(3);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #D0D0D0">Room 3</button>
 
-<button id="4" onclick="roomSelect(4);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #B8B8B8">Room 4</button>
-<button id="5" onclick="roomSelect(5);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #606060">Room 5</button>
-<button id="6" onclick="roomSelect(6);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #ffffff">Room 6</button>
+<!-- <button id="4" onclick="roomSelect(4);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #B8B8B8">Room 4</button> -->
+<button id="5" onclick="roomSelect(5);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #606060">Room 4</button>
+<button id="6" onclick="roomSelect(6);" class=" ui-btn ui-shadow ui-corner-all" style="width: 100px;background-color: #ffffff">Room 5</button>
 </br>
 
 
-<div>
-    <svg id="fillgauge1" width="97%" height="200"></svg>
+<div id="animation">
+    <!-- <svg id="fillgauge1" width="97%" height="200"></svg> -->
 </div>
 <!-- <div>
     <h3>Lumination (lux)</h3>
@@ -149,34 +149,52 @@ function printData()
     {
         var recommendation = ""
         var color = ""
+        document.getElementById("animation").innerHTML= "";
+
+
         if (sensor && sensor.data) 
             {
             // Display the info.
             if (sensor.data.t > 22 && sensor.data.t < 26 && sensor.data.l < 4){
-                var gauge1 = loadLiquidFillGauge("fillgauge1", 100) 
+                document.getElementById("animation").innerHTML= '<svg id="fillgauge1" width="97%" height="200"></svg>'
+                gauge1 = loadLiquidFillGauge("fillgauge1", 100)
                 var config1 = liquidFillGaugeDefaultSettings();
                 config1.circleColor = "#009933";
                 color = "#009933";
                 recommendation = "RECOMMENDED"
             }
-            if (sensor.data.t < 22 && sensor.data.l < 4){
-                var gauge1 = loadLiquidFillGauge("fillgauge1", 50) 
+            if (sensor.data.t < 22 && sensor.data.l < 6){
+                document.getElementById("animation").innerHTML= '<svg id="fillgauge1" width="97%" height="200"></svg>'
+                
+                gauge1 = loadLiquidFillGauge("fillgauge1", 50) 
                 var config1 = liquidFillGaugeDefaultSettings();
                 config1.circleColor = "#ff9933";  
                 color = "#ff9933";  
                 recommendation = "NEUTRAL"
             }                 
             if (sensor.data.t > 26 && sensor.data.l > 4){
-                var gauge1 = loadLiquidFillGauge("fillgauge1", 20) 
+                document.getElementById("animation").innerHTML= '<svg id="fillgauge1" width="97%" height="200"></svg>'
+                
+                gauge1 = loadLiquidFillGauge("fillgauge1", 20) 
                 var config1 = liquidFillGaugeDefaultSettings();
                 config1.circleColor = "#cc0000";
                 color = "#cc0000";
                 recommendation = "NOT RECOMMENDED"
-            }                   
+            }  
+            if (sensor.data.t > 22 && sensor.data.t < 26 && sensor.data.l > 4){
+                document.getElementById("animation").innerHTML= '<svg id="fillgauge1" width="97%" height="200"></svg>'
+                
+                gauge1 = loadLiquidFillGauge("fillgauge1", 20) 
+                var config1 = liquidFillGaugeDefaultSettings();
+                config1.circleColor = "#009933";
+                color = "#009933";
+                recommendation = "RECOMMENDED"
+            }                              
                 // var gauge2= loadLiquidFillGauge("fillgauge2", sensor.data.l);
                 // var gauge3 = loadLiquidFillGauge("fillgauge3", sensor.data);
                 html =
                 '<div style="background-color: ' + color +'"><h3>' + recommendation + '</h3></div>'
+                 + '<h2>Based on temperature and lumination it is ' + recommendation.toLowerCase() + ' if you want the best experience in the Dome of Vision. </h2>'
                  + '<br /><div id="time">Time  ' + sensor.data.timestamp + '</div>'
                  + '<div id="hum">Based on temperature: ' + sensor.data.t + ' °C</div>'
                  + '<div id="temp">Based on lumination ' + sensor.data.l + ' lux</div>'
